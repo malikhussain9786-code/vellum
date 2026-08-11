@@ -47,7 +47,7 @@ Requirements: Write 120-150 words as a full, substantive paragraph — this is a
     const text = await callGroq({
       system: 'You are an expert resume writer. You write detailed, substantive, specific resume summaries of realistic professional length — never one-line taglines. You never use generic corporate filler language.',
       prompt,
-      maxTokens: 8192,
+      maxTokens: 1200,
     })
     return ok({ summary: text.trim() })
   } catch (err) {
@@ -72,7 +72,7 @@ Requirements: Start with a strong action verb. Where the original implies impact
     const text = await callGroq({
       system: 'You are an expert resume writer specializing in turning plain descriptions into strong, achievement-oriented resume bullets, without fabricating facts.',
       prompt,
-      maxTokens: 8192,
+      maxTokens: 400,
     })
     return ok({ improved: text.trim() })
   } catch (err) {
@@ -96,7 +96,7 @@ Requirements: The result should be 120-150 words — a full, substantive paragra
     const text = await callGroq({
       system: 'You are an expert resume writer. You improve and, where needed, properly expand summaries into full, substantive professional paragraphs — never shortening them into a single terse line. You never fabricate claims.',
       prompt,
-      maxTokens: 8192,
+      maxTokens: 1200,
     })
     return ok({ improved: text.trim() })
   } catch (err) {
@@ -125,7 +125,7 @@ Suggest a realistic mix of technical and relevant soft skills for this specific 
     const text = await callGroq({
       system: 'You are a career advisor. You suggest realistic, specific, role-appropriate skills. You respond only with a JSON array of strings.',
       prompt,
-      maxTokens: 8192,
+      maxTokens: 500,
       jsonMode: true,
     })
     const skills = parseJsonResponse(text)
@@ -163,7 +163,7 @@ Score based on: has a summary, bullets are achievement/metric-oriented rather th
     const text = await callGroq({
       system: 'You are an experienced professional resume reviewer and ATS expert. You give specific, honest, substantive feedback in complete sentences — never short cryptic fragments. You respond only with valid JSON, no markdown formatting.',
       prompt,
-      maxTokens: 8192,
+      maxTokens: 2000,
       jsonMode: true,
     })
     const result = parseJsonResponse(text)
