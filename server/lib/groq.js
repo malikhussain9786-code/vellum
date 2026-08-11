@@ -16,7 +16,18 @@
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const DEFAULT_MODEL = 'openai/gpt-oss-120b'
 
-export async function callGroq({ system, prompt, maxTokens = 600, jsonMode = false }) {
+// Model errors seen in practice traced to two real causes, not just "not
+// enough tokens":
+// 1. Groq's own docs use `max_completion_tokens` for this model, not the
+//    older `max_tokens` — 8192 is Groq's own documented ceiling for it.
+// 2. openai/gpt-oss-120b is a reasoning model — it spends part of its
+//    token budget on invisible "thinking" before writing the actual
+//    answer, controlled by `reasoning_effort` (default: medium). Left at
+//    the default, that reasoning can consume the whole budget before any
+//    answer text is produced, which is exactly the finish_reason:"length"
+//    with empty content this project was hitting. Setting it to 'low'
+//    leaves the budget for the actual answer instead.
+export async function callGroq({ system, prompt, maxTokens = 8192, jsonMode = false }) {
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     throw new Error(
@@ -32,7 +43,8 @@ export async function callGroq({ system, prompt, maxTokens = 600, jsonMode = fal
       { role: 'system', content: system },
       { role: 'user', content: prompt },
     ],
-    max_tokens: maxTokens,
+    max_completion_tokens: maxTokens,
+    reasoning_effort: 'low',
     ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
   }
 
