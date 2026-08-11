@@ -33,21 +33,21 @@ export async function handleSummary(body) {
   const skillsText = [...(skills?.technical || []), ...(skills?.soft || [])].slice(0, 12).join(', ')
 
   const prompt = clip(
-    `Write a detailed, professional resume summary for this person. Respond with ONLY the summary text — no preamble, no quotes, no markdown.
+    `Write a professional resume summary for this person. Respond with ONLY the summary text — no preamble, no quotes, no markdown.
 
 Name/role: ${personal.title}
 Experience:
 ${experienceText || '(no experience listed yet)'}
 Skills: ${skillsText || '(none listed)'}
 
-Requirements: Write 120-150 words as a full, substantive paragraph — this is a real professional summary, not a one-line tagline. Cover their overall experience level and domain, 2-3 concrete strengths or areas of impact drawn from what's listed above, and what kind of role/contribution they're suited for. Recruiter-facing, specific rather than generic, no first person ("I"), no clichés like "results-driven" or "team player". Do not pad with filler just to reach the word count — every sentence should carry real content.`
+Requirements: Write 55-80 words as 3-4 tight sentences — this is a resume summary, meant to be read in a few seconds, not a paragraph or cover-letter opening. In that space, cover: their experience level and domain, one or two concrete strengths or areas of impact drawn from what's listed above, and what kind of role they're suited for. Every word must earn its place — no filler, no padding, no generic claims that aren't backed by something specific above. Recruiter-facing, specific, no first person ("I"), no clichés like "results-driven" or "team player".`
   )
 
   try {
     const text = await callGroq({
-      system: 'You are an expert resume writer. You write detailed, substantive, specific resume summaries of realistic professional length — never one-line taglines. You never use generic corporate filler language.',
+      system: 'You are an expert resume writer. You write tight, specific resume summaries at real professional length (3-4 sentences, not a paragraph) — never a one-line tagline and never a bloated cover-letter-style paragraph. You never use generic corporate filler language.',
       prompt,
-      maxTokens: 1200,
+      maxTokens: 600,
     })
     return ok({ summary: text.trim() })
   } catch (err) {
@@ -89,14 +89,14 @@ export async function handleImproveSummary(body) {
 
 Original: "${summaryText}"
 
-Requirements: The result should be 120-150 words — a full, substantive paragraph, not a shortened version of the original. If the original is shorter than that, EXPAND it properly: draw out and articulate the substance already implied in it (experience level, domain, strengths) into a complete professional summary, without inventing facts, claims, or experience that weren't in the original. If the original is already close to 120-150 words, polish the wording and structure rather than cutting it down. Recruiter-facing, specific, no first person ("I"), no clichés. Never fabricate details.`
+Requirements: The result should be 55-80 words as 3-4 tight sentences — this is a resume summary meant to be read in a few seconds, not a paragraph. If the original is a single vague line, expand it just enough to properly cover: experience level and domain, one or two concrete strengths already implied in it, and what kind of role it's suited for — without inventing facts, claims, or experience that weren't in the original. If the original is already long or padded, tighten it down to this length rather than keeping the padding. Every word must earn its place. Recruiter-facing, specific, no first person ("I"), no clichés. Never fabricate details.`
   )
 
   try {
     const text = await callGroq({
-      system: 'You are an expert resume writer. You improve and, where needed, properly expand summaries into full, substantive professional paragraphs — never shortening them into a single terse line. You never fabricate claims.',
+      system: 'You are an expert resume writer. You improve summaries to a tight, accurate professional length (3-4 sentences, 55-80 words) — expanding vague one-liners just enough, and trimming padded ones down, never leaving either a fragment or a bloated paragraph. You never fabricate claims.',
       prompt,
-      maxTokens: 1200,
+      maxTokens: 600,
     })
     return ok({ improved: text.trim() })
   } catch (err) {
