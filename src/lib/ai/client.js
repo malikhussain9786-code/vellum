@@ -1,5 +1,5 @@
 // Every function here calls OUR OWN backend (server/index.js locally, or
-// the /api serverless functions in production) — never Gemini's API
+// the /api serverless functions in production) — never Groq's API
 // directly. The API key never touches the browser.
 
 async function post(path, payload) {

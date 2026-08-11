@@ -27,7 +27,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }))
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Vellum AI server running on http://localhost:${PORT}`)
-  if (!process.env.GEMINI_API_KEY) {
-    console.warn('⚠️  GEMINI_API_KEY is not set — AI features will return an error until it is.')
+  if (!process.env.GROQ_API_KEY) {
+    console.warn('⚠️  GROQ_API_KEY is not set — AI features will return an error until it is.')
   }
 })

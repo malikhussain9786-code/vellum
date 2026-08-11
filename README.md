@@ -11,11 +11,11 @@ suggestions, resume review), and PDF export — free, no locked features.
 ```
 src/            React frontend (Vite + Tailwind v4)
 server/         Express backend for local dev, Render, Railway
-  lib/          Shared handler logic — the actual AI/Gemini calls
+  lib/          Shared handler logic — the actual AI/Groq calls
 api/            Vercel serverless functions (reuse server/lib, don't duplicate it)
 ```
 
-The frontend never talks to the Gemini API directly. It calls `/api/ai/*`,
+The frontend never talks to the Groq API directly. It calls `/api/ai/*`,
 which is served by `server/index.js` locally (or on Render/Railway), or by
 the files in `api/` on Vercel. The API key only ever lives on the server
 side — it is never bundled into frontend code.
@@ -28,23 +28,19 @@ side — it is never bundled into frontend code.
 npm install
 ```
 
-### Getting your Gemini API key (one-time, ~2 minutes, free)
+### Getting your Groq API key (one-time, ~1 minute, free)
 
-1. Go to **[aistudio.google.com/apikey](https://aistudio.google.com/apikey)**
-2. Sign in with any Google account
-3. If asked to select a project, choose **"Default Gemini Project"** — the
-   other options (upload/select existing project) are for larger Google
-   Cloud setups, not needed here
-4. Click **"Create API key"** and copy it — it will look like `AQ.Ab...`
-   (Google's current key format; older tutorials may show `AIzaSy...`
-   keys, both are valid)
-5. No credit card is required for this. The free tier includes 1,500
-   requests/day — far more than personal use needs
+1. Go to **[console.groq.com/keys](https://console.groq.com/keys)**
+2. Sign in (Google account or email)
+3. Click **"Create API Key"**, give it any name, and copy the key — it
+   starts with `gsk_`
+4. No credit card is required for this. The free tier's exact limits vary
+   by model, but are generous enough for personal use
 
-**Important — this is a separate thing from "Gemini Advanced" or "Google AI
-Pro/Plus" (the paid consumer chat subscription).** That subscription does
-**not** include API access and won't make this project's AI features work.
-Only a key from the URL above does.
+**Note:** Groq has deprecated specific models before as it releases newer
+ones — this project reads the model name from an env var (see below)
+specifically so a future deprecation is a one-line `.env` fix, not a code
+change.
 
 ### Adding the key to this project
 
@@ -52,21 +48,20 @@ Only a key from the URL above does.
 cp .env.example .env
 ```
 
-Open `.env` in any editor, find the line `GEMINI_API_KEY=your_key_here`,
+Open `.env` in any editor, find the line `GROQ_API_KEY=your_key_here`,
 and replace `your_key_here` with the key you copied. Save the file.
 
 **Never edit `.env.example`** — it's a template and should keep the
 placeholder text. Only `.env` (no ".example") gets your real key.
 **Never commit `.env`** to git — it's already in `.gitignore`.
 
-### If the free tier ever changes
+### If a model gets deprecated
 
-Go back to the same page you got your key from and add a small amount of
-pay-as-you-go credit directly to that API key's account. Nothing in the
-code or your `.env` file needs to change — the same key starts working
-again automatically once billing is active. (You do **not** need to buy
-any Google subscription for this — it's pay-per-use, typically pennies
-for personal-scale usage.)
+Groq occasionally retires older models in favor of newer ones. If AI
+features start returning a "model not found" or "decommissioned" error,
+check [console.groq.com/docs/models](https://console.groq.com/docs/models)
+for the current recommended model, then set `GROQ_MODEL=<model-name>` in
+your `.env` file — no code changes needed.
 
 ---
 
@@ -129,7 +124,7 @@ the built frontend as static files — no separate backend deployment needed.
 1. Push this project to GitHub.
 2. Import it in Vercel.
 3. In Vercel's project settings → Environment Variables, add
-   `GEMINI_API_KEY` with your real key.
+   `GROQ_API_KEY` with your real key.
 4. Deploy. Vercel builds the frontend (`vite build`) and wires up `/api/ai/*`
    automatically.
 
@@ -142,7 +137,7 @@ Both platforms run a persistent Node server well, which is what
    auto-detect `npm install` + a start command — set the start command to
    `node server/index.js`, or add a `"start"` script if the platform
    requires one).
-2. Add `GEMINI_API_KEY` in that service's environment variables.
+2. Add `GROQ_API_KEY` in that service's environment variables.
 3. Deploy the frontend separately as a static site (build command
    `npm run build`, publish directory `dist`).
 4. Point the frontend at your backend: since this project's frontend calls
@@ -171,7 +166,7 @@ Both platforms run a persistent Node server well, which is what
   is now reliable on every device. The tradeoff: the downloaded PDF uses
   standard system fonts (not the on-screen custom fonts), a deliberate
   choice for reliability — see `src/lib/pdf/pdfFonts.js` for why.
-- **The AI backend needs your own free Gemini API key** and will show a
+- **The AI backend needs your own free Groq API key** and will show a
   clear error in the UI if one isn't configured, rather than failing
   silently.
 - **Photos are optional everywhere** — resumes work fully without one.
@@ -201,7 +196,7 @@ Both platforms run a persistent Node server well, which is what
 - Builder: all data-entry sections (including optional photo upload),
   live preview, template switching, autosave.
 - AI features: resume summary generation, bullet improvement, skill
-  suggestions, full resume review with an ATS score — via Gemini.
+  suggestions, full resume review with an ATS score — via Groq.
 - Real PDF download + browser print.
 - A real icon+wordmark logo (`src/components/ui/LogoMark.jsx`), applied
   consistently across the app and the browser tab favicon.

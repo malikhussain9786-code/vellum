@@ -1,4 +1,4 @@
-import { callGemini, parseJsonResponse } from './gemini.js'
+import { callGroq, parseJsonResponse } from './groq.js'
 
 // Every handler takes a parsed request body and returns { status, body },
 // independent of Express vs Vercel's different request/response shapes —
@@ -44,7 +44,7 @@ Requirements: Write 120-150 words as a full, substantive paragraph — this is a
   )
 
   try {
-    const text = await callGemini({
+    const text = await callGroq({
       system: 'You are an expert resume writer. You write detailed, substantive, specific resume summaries of realistic professional length — never one-line taglines. You never use generic corporate filler language.',
       prompt,
       maxTokens: 450,
@@ -69,7 +69,7 @@ Requirements: Start with a strong action verb. Where the original implies impact
   )
 
   try {
-    const text = await callGemini({
+    const text = await callGroq({
       system: 'You are an expert resume writer specializing in turning plain descriptions into strong, achievement-oriented resume bullets, without fabricating facts.',
       prompt,
       maxTokens: 150,
@@ -93,7 +93,7 @@ Requirements: The result should be 120-150 words — a full, substantive paragra
   )
 
   try {
-    const text = await callGemini({
+    const text = await callGroq({
       system: 'You are an expert resume writer. You improve and, where needed, properly expand summaries into full, substantive professional paragraphs — never shortening them into a single terse line. You never fabricate claims.',
       prompt,
       maxTokens: 450,
@@ -122,7 +122,7 @@ Suggest a realistic mix of technical and relevant soft skills for this specific 
   )
 
   try {
-    const text = await callGemini({
+    const text = await callGroq({
       system: 'You are a career advisor. You suggest realistic, specific, role-appropriate skills. You respond only with a JSON array of strings.',
       prompt,
       maxTokens: 200,
@@ -160,7 +160,7 @@ Score based on: has a summary, bullets are achievement/metric-oriented rather th
   )
 
   try {
-    const text = await callGemini({
+    const text = await callGroq({
       system: 'You are an experienced professional resume reviewer and ATS expert. You give specific, honest, substantive feedback in complete sentences — never short cryptic fragments. You respond only with valid JSON, no markdown formatting.',
       prompt,
       maxTokens: 900,
