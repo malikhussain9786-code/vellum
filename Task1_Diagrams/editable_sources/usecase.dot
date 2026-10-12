@@ -1,0 +1,67 @@
+digraph UC {
+  rankdir=LR; splines=true; nodesep=0.35; ranksep=1.6; fontname="Helvetica"; bgcolor="white";
+  node [fontname="Helvetica", fontsize=12];
+  edge [fontname="Helvetica", fontsize=10];
+
+  // Actors
+  Visitor [shape=box, style="rounded,filled", fillcolor="#fff3d6", label="Visitor\n(not signed in)", width=1.5, height=0.8];
+  User [shape=box, style="rounded,filled", fillcolor="#d9ecff", label="Registered User", width=1.6, height=0.8];
+  AI [shape=box, style="rounded,filled", fillcolor="#e6f6e6", label="AI Service\n(Groq API)", width=1.5, height=0.8];
+
+  subgraph cluster_sys {
+    label="Vellum — AI Resume Builder"; labeljust=c; fontsize=16; style="rounded"; color="#555555"; penwidth=1.6;
+    node [shape=ellipse, style=filled, fillcolor="#fdfdfd", color="#444444"];
+
+    // Public
+    UC_home   [label="View Home Page"];
+    UC_tpl    [label="Browse Templates"];
+    UC_contact[label="Send Contact Message"];
+    UC_signup [label="Register (Sign Up)"];
+    UC_login  [label="Sign In"];
+    UC_reset  [label="Reset Forgotten Password"];
+
+    // Auth'd
+    UC_dash   [label="View Dashboard"];
+    UC_create [label="Create Resume"];
+    UC_edit   [label="Edit Resume Details\n(personal, experience, education,\nprojects, skills, certificates, extras)"];
+    UC_switch [label="Switch Template"];
+    UC_photo  [label="Upload Photo"];
+    UC_rename [label="Rename / Delete Resume"];
+    UC_pdf    [label="Download PDF / Print"];
+    UC_profile[label="Manage Profile\n(name, change password)"];
+    UC_logout [label="Sign Out"];
+
+    // AI
+    UC_ai     [label="Use AI Writing Tools"];
+    UC_sum    [label="Generate / Improve Summary"];
+    UC_bul    [label="Improve Bullet Point"];
+    UC_skill  [label="Suggest Skills"];
+    UC_review [label="AI Resume Review"];
+
+    // Shared
+    UC_valid  [label="Validate Input", style="filled,dashed", fillcolor="#f3f3f3"];
+  }
+
+  Visitor -> UC_home; Visitor -> UC_tpl; Visitor -> UC_contact; Visitor -> UC_signup; Visitor -> UC_login; Visitor -> UC_reset;
+
+  User -> UC_dash; User -> UC_create; User -> UC_edit; User -> UC_switch; User -> UC_rename;
+  User -> UC_pdf; User -> UC_profile; User -> UC_logout; User -> UC_ai; User -> UC_contact;
+
+  UC_photo -> UC_edit [style=dashed, label="«extend»", constraint=false];
+  UC_ai -> UC_sum    [style=dashed, label="«include»"];
+  UC_ai -> UC_bul    [style=dashed, label="«include»"];
+  UC_ai -> UC_skill  [style=dashed, label="«include»"];
+  UC_ai -> UC_review [style=dashed, label="«include»"];
+
+  UC_signup  -> UC_valid [style=dashed, label="«include»"];
+  UC_login   -> UC_valid [style=dashed, label="«include»"];
+  UC_reset   -> UC_valid [style=dashed, label="«include»"];
+  UC_contact -> UC_valid [style=dashed, label="«include»"];
+  UC_edit    -> UC_valid [style=dashed, label="«include»"];
+  UC_profile -> UC_valid [style=dashed, label="«include»"];
+
+  UC_sum -> AI [dir=none]; UC_bul -> AI [dir=none]; UC_skill -> AI [dir=none]; UC_review -> AI [dir=none];
+
+  // Registered user inherits visitor abilities
+  User -> Visitor [arrowhead=empty, label="  generalizes", style=solid, constraint=false];
+}
