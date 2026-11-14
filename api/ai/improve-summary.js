@@ -5,3 +5,4 @@ export default async function handler(req, res) {
   const { status, body } = await handleImproveSummary(req.body)
   res.status(status).json(body)
 }
+
