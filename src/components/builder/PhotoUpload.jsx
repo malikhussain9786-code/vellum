@@ -68,3 +68,4 @@ export default function PhotoUpload({ value, onChange }) {
     </div>
   )
 }
+
