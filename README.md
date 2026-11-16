@@ -192,6 +192,7 @@ Both platforms run a persistent Node server well, which is what
   eyeballed.
 - Full auth: signup, login, forgot password, protected routes, per-user
   data isolation.
+  
 - Dashboard with real resume CRUD (create, rename, delete).
 - Builder: all data-entry sections (including optional photo upload),
   live preview, template switching, autosave.
