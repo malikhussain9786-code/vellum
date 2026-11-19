@@ -9,6 +9,7 @@ import SkillsSection from './SkillsSection.jsx'
 import SkillsBars from './SkillsBars.jsx'
 import CertificatesSection from './CertificatesSection.jsx'
 import ExtrasSection from './ExtrasSection.jsx'
+import AliPreview from './AliPreview.jsx'
 
 // The engine: one component, driven entirely by `theme`. Every template is
 // this same component with a different theme object passed in — never a
