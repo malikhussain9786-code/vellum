@@ -1,11 +1,11 @@
 import TextField from '../../ui/TextField.jsx'
 import { ItemCard, AddButton } from '../../ui/RepeatingItem.jsx'
 
-function emptyCertificate() {
-  return { id: crypto.randomUUID(), name: '', org: '', date: '' }
+function emptyAliItem() {
+  return { id: crypto.randomUUID(), title: '', details: '', date: '' }
 }
 
-export default function CertificatesSection({ value = [], onChange }) {
+export default function AliSection({ value = [], onChange }) {
   function updateItem(id, patch) {
     onChange(value.map((item) => (item.id === id ? { ...item, ...patch } : item)))
   }
@@ -13,7 +13,7 @@ export default function CertificatesSection({ value = [], onChange }) {
     onChange(value.filter((item) => item.id !== id))
   }
   function addItem() {
-    onChange([...value, emptyCertificate()])
+    onChange([...value, emptyAliItem()])
   }
 
   return (
@@ -22,27 +22,27 @@ export default function CertificatesSection({ value = [], onChange }) {
         <ItemCard key={item.id} onRemove={() => removeItem(item.id)}>
           <div className="grid sm:grid-cols-3 gap-3">
             <TextField
-              label="Certificate"
-              value={item.name}
-              onChange={(e) => updateItem(item.id, { name: e.target.value })}
-              placeholder="Certified Usability Analyst"
+              label="Title"
+              value={item.title}
+              onChange={(e) => updateItem(item.id, { title: e.target.value })}
+              placeholder="Title"
             />
             <TextField
-              label="Organization"
-              value={item.org}
-              onChange={(e) => updateItem(item.id, { org: e.target.value })}
-              placeholder="HFI"
+              label="Details"
+              value={item.details}
+              onChange={(e) => updateItem(item.id, { details: e.target.value })}
+              placeholder="Details"
             />
             <TextField
               label="Date"
               value={item.date}
               onChange={(e) => updateItem(item.id, { date: e.target.value })}
-              placeholder="2021"
+              placeholder="2025"
             />
           </div>
         </ItemCard>
       ))}
-      <AddButton onClick={addItem}>Add certificate</AddButton>
+      <AddButton onClick={addItem}>Add item</AddButton>
     </div>
   )
 }

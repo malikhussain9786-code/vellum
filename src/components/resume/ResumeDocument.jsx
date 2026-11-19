@@ -31,10 +31,11 @@ export default function ResumeDocument({ data, theme }) {
     </>
   )
 
-  const sideSections = (t = theme) => (
+    const sideSections = (t = theme) => (
     <>
       <SkillsComponent theme={t} skills={data.skills} />
       <CertificatesSection theme={t} items={data.certificates} />
+      <AliPreview theme={t} items={data.ali} />
       <ExtrasSection theme={t} extras={data.extras} />
     </>
   )
